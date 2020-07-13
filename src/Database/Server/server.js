@@ -6,14 +6,10 @@ var bodyParser = require('body-parser')
 var env = require('dotenv').config({ path: '../Config/.env' });
 var exphbs = require('express-handlebars')
 
-// var env = require('dotenv').load();
 //Models
-// console.log("//Models")
 var models = require("../App/models");
-//Routes
-
+var modelUser = require("../App/models/user");
 //Sync Database
-// console.log("//Sync Database",models)
 
 //For BodyParser
 //application/... đây là các cách để post dũ liệu trong HTTP.
@@ -33,14 +29,15 @@ app.get('/', function (req, res) {
 
 });
 //For Handlebars
-app.set('views', '../app/views')
+app.set('views', '../App/views')
 app.engine('hbs', exphbs({
 	extname: '.hbs'
 }));
 app.set('view engine', '.hbs');
 //Routes
 var authRoute = require('../App/routers/auth.js')(app);
-require('../Config/passport/passport.js')(passport, models.user);
+console.log('models.user',models.user)
+require('../Config/passport/passport')(passport,models.user);
 //Sync Database
 models.sequelize.sync().then(function () {
 

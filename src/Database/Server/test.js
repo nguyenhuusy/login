@@ -1,77 +1,741 @@
-var express = require('express')
-var app = express()
-var passport = require('passport')
-var session = require('express-session')
-var bodyParser = require('body-parser')
-var env = require('dotenv').load()
-var exphbs = require('express-handlebars')
- 
- 
-//For BodyParser
-app.use(bodyParser.urlencoded({
-    extended: true
-}));
-app.use(bodyParser.json());
- 
- 
-// For Passport
-app.use(session({
-    secret: 'keyboard cat',
-    resave: true,
-    saveUninitialized: true
-})); // session secret
-app.use(passport.initialize());
-app.use(passport.session()); // persistent login sessions
- 
- 
-//For Handlebars
-app.set('views', './app/views')
-app.engine('hbs', exphbs({
-    extname: '.hbs'
-}));
-app.set('view engine', '.hbs');
- 
- 
- 
-app.get('/', function(req, res) {
- 
-    res.send('Welcome to Passport with Sequelize');
- 
-});
- 
-//Models
-var models = require("./app/models");
- 
-//Routes
- 
-var authRoute = require('./app/routes/auth.js')(app);
- 
- 
-//load passport strategies
- 
-require('./app/config/passport/passport.js')(passport, models.user);
- 
- 
-//Sync Database
- 
-models.sequelize.sync().then(function() {
- 
-    console.log('Nice! Database looks fine')
- 
- 
-}).catch(function(err) {
- 
-    console.log(err, "Something went wrong with the Database Update!")
- 
-});
- 
- 
-app.listen(5000, function(err) {
- 
-    if (!err)
- 
-        console.log("Site is live");
-         
-    else console.log(err)
- 
-});
+{
+	user:
+	{
+		[Function: user]
+		sequelize:
+		Sequelize {
+			options: [Object],
+				config: [Object],
+					dialect: [Object],
+						queryInterface: [Object],
+							models: [Object],
+								modelManager: [Object],
+									connectionManager: [Object]
+		},
+		options:
+		{
+			timestamps: true,
+				validate: { },
+			freezeTableName: false,
+				underscored: false,
+					paranoid: false,
+						rejectOnEmpty: false,
+							whereCollection: null,
+								schema: null,
+									schemaDelimiter: '',
+										defaultScope: { },
+			scopes: { },
+			indexes: [],
+				name: [Object],
+					omitNull: false,
+						sequelize: [Object],
+							hooks: { }
+		},
+		associations: { },
+		underscored: false,
+			tableName: 'users',
+				_schema: null,
+					_schemaDelimiter: '',
+						rawAttributes:
+		{
+			id: [Object],
+				firstname: [Object],
+					lastname: [Object],
+						username: [Object],
+							about: [Object],
+								email: [Object],
+									password: [Object],
+										last_login: [Object],
+											status: [Object],
+												createdAt: [Object],
+													updatedAt: [Object]
+		},
+		_indexes: [],
+			primaryKeys: { id: [Object] },
+		_readOnlyAttributes: Set { 'createdAt', 'updatedAt' },
+		_timestampAttributes: { createdAt: 'createdAt', updatedAt: 'updatedAt' },
+		_hasReadOnlyAttributes: true,
+			_dataTypeChanges:
+		{
+			last_login: [Function: _isChanged],
+				createdAt: [Function: _isChanged],
+					updatedAt: [Function: _isChanged]
+		},
+		_dataTypeSanitizers:
+		{
+			last_login: [Function: _sanitize],
+				createdAt: [Function: _sanitize],
+					updatedAt: [Function: _sanitize]
+		},
+		_hasBooleanAttributes: false,
+			_hasDateAttributes: true,
+				_jsonAttributes: Set { },
+		_virtualAttributes: Set { },
+		_defaultValues: { status: [Function] },
+		fieldRawAttributesMap:
+		{
+			id: [Object],
+				firstname: [Object],
+					lastname: [Object],
+						username: [Object],
+							about: [Object],
+								email: [Object],
+									password: [Object],
+										last_login: [Object],
+											status: [Object],
+												createdAt: [Object],
+													updatedAt: [Object]
+		},
+		uniqueKeys: { },
+		fieldAttributeMap: { },
+		_hasJsonAttributes: false,
+			_hasVirtualAttributes: false,
+				_hasDefaultValues: true,
+					tableAttributes:
+		{
+			id: [Object],
+				firstname: [Object],
+					lastname: [Object],
+						username: [Object],
+							about: [Object],
+								email: [Object],
+									password: [Object],
+										last_login: [Object],
+											status: [Object],
+												createdAt: [Object],
+													updatedAt: [Object]
+		},
+		primaryKeyAttributes: ['id'],
+			primaryKeyAttribute: 'id',
+				primaryKeyField: 'id',
+					_hasPrimaryKeys: true,
+						_isPrimaryKey: [Function],
+							autoIncrementAttribute: 'id',
+								_scope: { },
+		_scopeNames: ['defaultScope']
+	},
+	sequelize:
+	Sequelize {
+		options:
+		{
+			dialect: 'mysql',
+				dialectModule: null,
+					dialectModulePath: null,
+						host: '127.0.0.1',
+							protocol: 'tcp',
+								define: { },
+			query: { },
+			sync: { },
+			timezone: '+00:00',
+				clientMinMessages: 'warning',
+					standardConformingStrings: true,
+						logging: [Function: bound consoleCall],
+							omitNull: false,
+								native: false,
+									replication: false,
+										ssl: undefined,
+											pool: { },
+			quoteIdentifiers: true,
+				hooks: { },
+			retry: [Object],
+				transactionType: 'DEFERRED',
+					isolationLevel: null,
+						databaseVersion: 0,
+							typeValidation: false,
+								benchmark: false,
+									minifyAliases: false,
+										logQueryParameters: false,
+											username: 'root',
+												password: null,
+													database: 'sequelize_passport'
+		},
+		config:
+		{
+			database: 'sequelize_passport',
+				username: 'root',
+					password: null,
+						host: '127.0.0.1',
+							port: 3306,
+								pool: { },
+			protocol: 'tcp',
+				native: false,
+					ssl: undefined,
+						replication: false,
+							dialectModule: null,
+								dialectModulePath: null,
+									keepDefaultTimezone: undefined,
+										dialectOptions: undefined
+		},
+		dialect:
+		MysqlDialect {
+			sequelize: [Circular],
+				connectionManager: [Object],
+					queryGenerator: [Object],
+						queryInterface: [Object]
+		},
+		queryInterface: MySQLQueryInterface { sequelize: [Circular], queryGenerator: [Object] },
+		models: { user: [Object] },
+		modelManager: ModelManager { models: [Array], sequelize: [Circular] },
+		connectionManager:
+		ConnectionManager {
+			sequelize: [Circular],
+				config: [Object],
+					dialect: [Object],
+						versionPromise: null,
+							dialectName: 'mysql',
+								pool: [Object],
+									lib: [Object]
+		}
+	},
+	Sequelize:
+	{
+		[Function: Sequelize]
+		version: '6.3.1',
+			options: { hooks: { } },
+		Utils:
+		{
+			classToInvokable: [Function: classToInvokable],
+				joinSQLFragments: [Function: joinSQLFragments],
+					useInflection: [Function: useInflection],
+						camelizeIf: [Function: camelizeIf],
+							underscoredIf: [Function: underscoredIf],
+								isPrimitive: [Function: isPrimitive],
+									mergeDefaults: [Function: mergeDefaults],
+										merge: [Function: merge],
+											spliceStr: [Function: spliceStr],
+												camelize: [Function: camelize],
+													underscore: [Function: underscore],
+														singularize: [Function: singularize],
+															pluralize: [Function: pluralize],
+																format: [Function: format],
+																	formatNamedParameters: [Function: formatNamedParameters],
+																		cloneDeep: [Function: cloneDeep],
+																			mapFinderOptions: [Function: mapFinderOptions],
+																				mapOptionFieldNames: [Function: mapOptionFieldNames],
+																					mapWhereFieldNames: [Function: mapWhereFieldNames],
+																						mapValueFieldNames: [Function: mapValueFieldNames],
+																							isColString: [Function: isColString],
+																								canTreatArrayAsAnd: [Function: canTreatArrayAsAnd],
+																									combineTableNames: [Function: combineTableNames],
+																										toDefaultValue: [Function: toDefaultValue],
+																											defaultValueSchemable: [Function: defaultValueSchemable],
+																												removeNullValuesFromHash: [Function: removeNullValuesFromHash],
+																													now: [Function: now],
+																														TICK_CHAR: '`',
+																															addTicks: [Function: addTicks],
+																																removeTicks: [Function: removeTicks],
+																																	flattenObjectDeep: [Function: flattenObjectDeep],
+																																		SequelizeMethod: [Function: SequelizeMethod],
+																																			Fn: [Function: Fn],
+																																				Col: [Function: Col],
+																																					Cast: [Function: Cast],
+																																						Literal: [Function: Literal],
+																																							Json: [Function: Json],
+																																								Where: [Function: Where],
+																																									getOperators: [Function: getOperators],
+																																										getComplexKeys: [Function: getComplexKeys],
+																																											getComplexSize: [Function: getComplexSize],
+																																												isWhereEmpty: [Function: isWhereEmpty],
+																																													generateEnumName: [Function: generateEnumName],
+																																														camelizeObjectKeys: [Function: camelizeObjectKeys],
+																																															defaults: [Function: defaults],
+																																																nameIndex: [Function: nameIndex],
+																																																	intersects: [Function: intersects]
+		},
+		Op:
+		{
+			eq: Symbol(eq),
+				ne: Symbol(ne),
+					gte: Symbol(gte),
+						gt: Symbol(gt),
+							lte: Symbol(lte),
+								lt: Symbol(lt),
+									not: Symbol(not),
+										is: Symbol(is),
+         in: Symbol(in),
+				notIn: Symbol(notIn),
+					like: Symbol(like),
+						notLike: Symbol(notLike),
+							iLike: Symbol(iLike),
+								notILike: Symbol(notILike),
+									startsWith: Symbol(startsWith),
+										endsWith: Symbol(endsWith),
+											substring: Symbol(substring),
+												regexp: Symbol(regexp),
+													notRegexp: Symbol(notRegexp),
+														iRegexp: Symbol(iRegexp),
+															notIRegexp: Symbol(notIRegexp),
+																between: Symbol(between),
+																	notBetween: Symbol(notBetween),
+																		overlap: Symbol(overlap),
+																			contains: Symbol(contains),
+																				contained: Symbol(contained),
+																					adjacent: Symbol(adjacent),
+																						strictLeft: Symbol(strictLeft),
+																							strictRight: Symbol(strictRight),
+																								noExtendRight: Symbol(noExtendRight),
+																									noExtendLeft: Symbol(noExtendLeft),
+																										and: Symbol(and),
+																											or: Symbol(or),
+																												any: Symbol(any),
+																													all: Symbol(all),
+																														values: Symbol(values),
+																															col: Symbol(col),
+																																placeholder: Symbol(placeholder),
+																																	join: Symbol(join)
+		},
+		TableHints:
+		{
+			NOLOCK: 'NOLOCK',
+				READUNCOMMITTED: 'READUNCOMMITTED',
+					UPDLOCK: 'UPDLOCK',
+						REPEATABLEREAD: 'REPEATABLEREAD',
+							SERIALIZABLE: 'SERIALIZABLE',
+								READCOMMITTED: 'READCOMMITTED',
+									TABLOCK: 'TABLOCK',
+										TABLOCKX: 'TABLOCKX',
+											PAGLOCK: 'PAGLOCK',
+												ROWLOCK: 'ROWLOCK',
+													NOWAIT: 'NOWAIT',
+														READPAST: 'READPAST',
+															XLOCK: 'XLOCK',
+																SNAPSHOT: 'SNAPSHOT',
+																	NOEXPAND: 'NOEXPAND'
+		},
+		IndexHints: { USE: 'USE', FORCE: 'FORCE', IGNORE: 'IGNORE' },
+		Transaction: { [Function: Transaction] Transaction: [Circular], default: [Circular] },
+		QueryTypes:
+		{
+			SELECT: 'SELECT',
+				INSERT: 'INSERT',
+					UPDATE: 'UPDATE',
+						BULKUPDATE: 'BULKUPDATE',
+							BULKDELETE: 'BULKDELETE',
+								DELETE: 'DELETE',
+									UPSERT: 'UPSERT',
+										VERSION: 'VERSION',
+											SHOWTABLES: 'SHOWTABLES',
+												SHOWINDEXES: 'SHOWINDEXES',
+													DESCRIBE: 'DESCRIBE',
+														RAW: 'RAW',
+															FOREIGNKEYS: 'FOREIGNKEYS',
+																SHOWCONSTRAINTS: 'SHOWCONSTRAINTS'
+		},
+		Validator:
+		{
+			version: '10.11.0',
+				toDate: [Object],
+					toFloat: [Object],
+						toInt: [Object],
+							toBoolean: [Object],
+								equals: [Object],
+									contains: [Function: contains],
+										matches: [Object],
+											isEmail: [Object],
+												isURL: [Object],
+													isMACAddress: [Object],
+														isIP: [Object],
+															isIPRange: [Object],
+																isFQDN: [Object],
+																	isBoolean: [Object],
+																		isAlpha: [Function: isAlpha],
+																			isAlphaLocales: [Array],
+																				isAlphanumeric: [Function: isAlphanumeric],
+																					isAlphanumericLocales: [Array],
+																						isNumeric: [Object],
+																							isPort: [Object],
+																								isLowercase: [Object],
+																									isUppercase: [Object],
+																										isAscii: [Object],
+																											isFullWidth: [Function: isFullWidth],
+																												isHalfWidth: [Function: isHalfWidth],
+																													isVariableWidth: [Object],
+																														isMultibyte: [Object],
+																															isSurrogatePair: [Object],
+																																isInt: [Object],
+																																	isFloat: [Function: isFloat],
+																																		isFloatLocales: [Array],
+																																			isDecimal: [Function: isDecimal],
+																																				isHexadecimal: [Object],
+																																					isDivisibleBy: [Object],
+																																						isHexColor: [Object],
+																																							isISRC: [Object],
+																																								isMD5: [Object],
+																																									isHash: [Object],
+																																										isJWT: [Object],
+																																											isJSON: [Object],
+																																												isEmpty: [Object],
+																																													isLength: [Object],
+																																														isByteLength: [Object],
+																																															isUUID: [Object],
+																																																isMongoId: [Object],
+																																																	isAfter: [Object],
+																																																		isBefore: [Object],
+																																																			isIn: [Object],
+																																																				isCreditCard: [Object],
+																																																					isIdentityCard: [Object],
+																																																						isISIN: [Object],
+																																																							isISBN: [Object],
+																																																								isISSN: [Object],
+																																																									isMobilePhone: [Function: isMobilePhone],
+																																																										isMobilePhoneLocales: [Array],
+																																																											isPostalCode: [Function: _default],
+																																																												isPostalCodeLocales: [Array],
+																																																													isCurrency: [Object],
+																																																														isISO8601: [Object],
+																																																															isRFC3339: [Object],
+																																																																isISO31661Alpha2: [Object],
+																																																																	isISO31661Alpha3: [Object],
+																																																																		isBase64: [Object],
+																																																																			isDataURI: [Object],
+																																																																				isMagnetURI: [Object],
+																																																																					isMimeType: [Object],
+																																																																						isLatLong: [Object],
+																																																																							ltrim: [Object],
+																																																																								rtrim: [Object],
+																																																																									trim: [Object],
+																																																																										escape: [Object],
+																																																																											unescape: [Object],
+																																																																												stripLow: [Object],
+																																																																													whitelist: [Object],
+																																																																														blacklist: [Object],
+																																																																															isWhitelisted: [Object],
+																																																																																normalizeEmail: [Object],
+																																																																																	toString: [Object],
+         default: [Circular],
+				isImmutable: [Function],
+					notNull: [Function],
+						extend: [Function: extend],
+							notEmpty: [Function: notEmpty],
+								len: [Function: len],
+									isUrl: [Function: isUrl],
+										isIPv6: [Function: isIPv6],
+											isIPv4: [Function: isIPv4],
+												notIn: [Function: notIn],
+													regex: [Function: regex],
+														notRegex: [Function: notRegex],
+															min: [Function: min],
+																max: [Function: max],
+																	not: [Function: not],
+																		notContains: [Function: notContains],
+																			is: [Function: is],
+																				isNull: [Object],
+																					isDate: [Function]
+		},
+		Model:
+		{
+			[Function: Model]
+			getAssociations: [Function: getAssociations],
+				getAssociationForAlias: [Function: getAssociationForAlias],
+					Mixin: [Object],
+         default: [Object],
+				_setupHooks: [Function: _setupHooks],
+					runHooks: [AsyncFunction: runHooks],
+						addHook: [Function: addHook],
+							removeHook: [Function: removeHook],
+								hasHook: [Function: hasHook],
+									hasHooks: [Function: hasHook],
+										beforeValidate: [Function],
+											afterValidate: [Function],
+												validationFailed: [Function],
+													beforeCreate: [Function],
+														afterCreate: [Function],
+															beforeDestroy: [Function],
+																afterDestroy: [Function],
+																	beforeRestore: [Function],
+																		afterRestore: [Function],
+																			beforeUpdate: [Function],
+																				afterUpdate: [Function],
+																					beforeSave: [Function],
+																						afterSave: [Function],
+																							beforeUpsert: [Function],
+																								afterUpsert: [Function],
+																									beforeBulkCreate: [Function],
+																										afterBulkCreate: [Function],
+																											beforeBulkDestroy: [Function],
+																												afterBulkDestroy: [Function],
+																													beforeBulkRestore: [Function],
+																														afterBulkRestore: [Function],
+																															beforeBulkUpdate: [Function],
+																																afterBulkUpdate: [Function],
+																																	beforeFind: [Function],
+																																		beforeFindAfterExpandIncludeAll: [Function],
+																																			beforeFindAfterOptions: [Function],
+																																				afterFind: [Function],
+																																					beforeCount: [Function],
+																																						beforeAssociate: [Function],
+																																							afterAssociate: [Function],
+																																								beforeSync: [Function],
+																																									afterSync: [Function],
+																																										beforeBulkSync: [Function],
+																																											afterBulkSync: [Function],
+																																												beforeQuery: [Function],
+																																													afterQuery: [Function]
+		},
+		DataTypes:
+		{
+			ABSTRACT: [Object],
+				STRING: [Object],
+					CHAR: [Object],
+						TEXT: [Object],
+							NUMBER: [Object],
+								TINYINT: [Object],
+									SMALLINT: [Object],
+										MEDIUMINT: [Object],
+											INTEGER: [Object],
+												BIGINT: [Object],
+													FLOAT: [Object],
+														TIME: [Object],
+															DATE: [Object],
+																DATEONLY: [Object],
+																	BOOLEAN: [Object],
+																		NOW: [Object],
+																			BLOB: [Object],
+																				DECIMAL: [Object],
+																					NUMERIC: [Object],
+																						UUID: [Object],
+																							UUIDV1: [Object],
+																								UUIDV4: [Object],
+																									HSTORE: [Object],
+																										JSON: [Object],
+																											JSONB: [Object],
+																												VIRTUAL: [Object],
+																													ARRAY: [Object],
+																														ENUM: [Object],
+																															RANGE: [Object],
+																																REAL: [Object],
+																																	'DOUBLE PRECISION': [Object],
+																																		DOUBLE: [Object],
+																																			GEOMETRY: [Object],
+																																				GEOGRAPHY: [Object],
+																																					CIDR: [Object],
+																																						INET: [Object],
+																																							MACADDR: [Object],
+																																								CITEXT: [Object],
+																																									postgres: [Object],
+																																										mysql: [Object],
+																																											mariadb: [Object],
+																																												sqlite: [Object],
+																																													mssql: [Object]
+		},
+		ABSTRACT: { [Function: ABSTRACT] types: { }, key: 'ABSTRACT' },
+		STRING: { [Function: STRING] types: [Object], key: 'STRING' },
+		CHAR: { [Function: CHAR] types: [Object], key: 'CHAR' },
+		TEXT: { [Function: TEXT] types: [Object], key: 'TEXT' },
+		NUMBER: { [Function: NUMBER] types: { }, key: 'NUMBER' },
+		TINYINT: { [Function: TINYINT] types: [Object], key: 'TINYINT' },
+		SMALLINT: { [Function: SMALLINT] types: [Object], key: 'SMALLINT' },
+		MEDIUMINT: { [Function: MEDIUMINT] types: [Object], key: 'MEDIUMINT' },
+		INTEGER: { [Function: INTEGER] types: [Object], key: 'INTEGER' },
+		BIGINT: { [Function: BIGINT] types: [Object], key: 'BIGINT' },
+		FLOAT: { [Function: FLOAT] types: [Object], key: 'FLOAT' },
+		TIME: { [Function: TIME] types: [Object], key: 'TIME' },
+		DATE: { [Function: DATE] types: [Object], key: 'DATE' },
+		DATEONLY: { [Function: DATEONLY] types: [Object], key: 'DATEONLY' },
+		BOOLEAN: { [Function: BOOLEAN] parse: [Function: _sanitize], types: [Object], key: 'BOOLEAN' },
+		NOW: { [Function: NOW] types: { }, key: 'NOW' },
+		BLOB: { [Function: BLOB] types: [Object], key: 'BLOB' },
+		DECIMAL: { [Function: DECIMAL] types: [Object], key: 'DECIMAL' },
+		NUMERIC: { [Function: DECIMAL] types: [Object], key: 'DECIMAL' },
+		UUID: { [Function: UUID] types: [Object], key: 'UUID' },
+		UUIDV1: { [Function: UUIDV1] types: { }, key: 'UUIDV1' },
+		UUIDV4: { [Function: UUIDV4] types: { }, key: 'UUIDV4' },
+		HSTORE: { [Function: HSTORE] types: [Object], key: 'HSTORE' },
+		JSON: { [Function: JSONTYPE] types: [Object], key: 'JSON' },
+		JSONB: { [Function: JSONB] types: [Object], key: 'JSONB' },
+		VIRTUAL: { [Function: VIRTUAL] types: { }, key: 'VIRTUAL' },
+		ARRAY: { [Function: ARRAY] types: { }, key: 'ARRAY' },
+		ENUM: { [Function: ENUM] types: [Object], key: 'ENUM' },
+		RANGE: { [Function: RANGE] types: [Object], key: 'RANGE' },
+		REAL: { [Function: REAL] types: [Object], key: 'REAL' },
+		'DOUBLE PRECISION': { [Function: DOUBLE] types: [Object], key: 'DOUBLE PRECISION' },
+		DOUBLE: { [Function: DOUBLE] types: [Object], key: 'DOUBLE PRECISION' },
+		GEOMETRY: { [Function: GEOMETRY] types: [Object], key: 'GEOMETRY' },
+		GEOGRAPHY: { [Function: GEOGRAPHY] types: [Object], key: 'GEOGRAPHY' },
+		CIDR: { [Function: CIDR] types: [Object], key: 'CIDR' },
+		INET: { [Function: INET] types: [Object], key: 'INET' },
+		MACADDR: { [Function: MACADDR] types: [Object], key: 'MACADDR' },
+		CITEXT: { [Function: CITEXT] types: [Object], key: 'CITEXT' },
+		postgres:
+		{
+			DECIMAL: [Function: DECIMAL],
+				BLOB: [Function: BLOB],
+					STRING: [Function: STRING],
+						CHAR: [Function: CHAR],
+							TEXT: [Function: TEXT],
+								CITEXT: [Function: CITEXT],
+									TINYINT: [Function: TINYINT],
+										SMALLINT: [Function: SMALLINT],
+											INTEGER: [Object],
+												BIGINT: [Function: BIGINT],
+													BOOLEAN: [Object],
+														DATE: [Function: DATE],
+															DATEONLY: [Function: DATEONLY],
+																REAL: [Function: REAL],
+																	'DOUBLE PRECISION': [Function: DOUBLE],
+																		FLOAT: [Function: FLOAT],
+																			GEOMETRY: [Function: GEOMETRY],
+																				GEOGRAPHY: [Function: GEOGRAPHY],
+																					HSTORE: [Function: HSTORE],
+																						RANGE: [Function: RANGE],
+																							ENUM: [Function: ENUM]
+		},
+		mysql:
+		{
+			ENUM: [Function: ENUM],
+				DATE: [Function: DATE],
+					DATEONLY: [Function: DATEONLY],
+						UUID: [Function: UUID],
+							GEOMETRY: [Function: GEOMETRY],
+								DECIMAL: [Function: DECIMAL],
+									JSON: [Function: JSONTYPE]
+		},
+		mariadb:
+		{
+			ENUM: [Function: ENUM],
+				DATE: [Function: DATE],
+					DATEONLY: [Function: DATEONLY],
+						UUID: [Function: UUID],
+							GEOMETRY: [Function: GEOMETRY],
+								DECIMAL: [Function: DECIMAL],
+									JSON: [Function: JSONTYPE]
+		},
+		sqlite:
+		{
+			DATE: [Function: DATE],
+				DATEONLY: [Function: DATEONLY],
+					STRING: [Function: STRING],
+						CHAR: [Function: CHAR],
+							NUMBER: [Function: NUMBER],
+								FLOAT: [Object],
+									REAL: [Object],
+										'DOUBLE PRECISION': [Object],
+											TINYINT: [Function: TINYINT],
+												SMALLINT: [Function: SMALLINT],
+													MEDIUMINT: [Function: MEDIUMINT],
+														INTEGER: [Function: INTEGER],
+															BIGINT: [Function: BIGINT],
+																TEXT: [Function: TEXT],
+																	ENUM: [Function: ENUM],
+																		JSON: [Function: JSONTYPE],
+																			CITEXT: [Function: CITEXT]
+		},
+		mssql:
+		{
+			BLOB: [Function: BLOB],
+				BOOLEAN: [Function: BOOLEAN],
+					ENUM: [Function: ENUM],
+						STRING: [Function: STRING],
+							UUID: [Function: UUID],
+								DATE: [Function: DATE],
+									DATEONLY: [Function: DATEONLY],
+										NOW: [Function: NOW],
+											TINYINT: [Function: TINYINT],
+												SMALLINT: [Function: SMALLINT],
+													INTEGER: [Function: INTEGER],
+														BIGINT: [Function: BIGINT],
+															REAL: [Function: REAL],
+																FLOAT: [Function: FLOAT],
+																	TEXT: [Function: TEXT]
+		},
+		Deferrable:
+		{
+			INITIALLY_DEFERRED: [Function: INITIALLY_DEFERRED],
+				INITIALLY_IMMEDIATE: [Function: INITIALLY_IMMEDIATE],
+					NOT: [Function: NOT],
+						SET_DEFERRED: [Function: SET_DEFERRED],
+							SET_IMMEDIATE: [Function: SET_IMMEDIATE]
+		},
+		Association:
+		{
+			[Function: Association]
+			BelongsTo: [Object],
+				HasOne: [Function: HasOne],
+					HasMany: [Object],
+						BelongsToMany: [Object],
+         default: [Circular],
+				Association: [Circular]
+		},
+		useInflection: [Function: useInflection],
+			_setupHooks: [Function: _setupHooks],
+				runHooks: [AsyncFunction: runHooks],
+					addHook: [Function: addHook],
+						removeHook: [Function: removeHook],
+							hasHook: [Function: hasHook],
+								hasHooks: [Function: hasHook],
+									beforeValidate: [Function],
+										afterValidate: [Function],
+											validationFailed: [Function],
+												beforeCreate: [Function],
+													afterCreate: [Function],
+														beforeDestroy: [Function],
+															afterDestroy: [Function],
+																beforeRestore: [Function],
+																	afterRestore: [Function],
+																		beforeUpdate: [Function],
+																			afterUpdate: [Function],
+																				beforeSave: [Function],
+																					afterSave: [Function],
+																						beforeUpsert: [Function],
+																							afterUpsert: [Function],
+																								beforeBulkCreate: [Function],
+																									afterBulkCreate: [Function],
+																										beforeBulkDestroy: [Function],
+																											afterBulkDestroy: [Function],
+																												beforeBulkRestore: [Function],
+																													afterBulkRestore: [Function],
+																														beforeBulkUpdate: [Function],
+																															afterBulkUpdate: [Function],
+																																beforeFind: [Function],
+																																	beforeFindAfterExpandIncludeAll: [Function],
+																																		beforeFindAfterOptions: [Function],
+																																			afterFind: [Function],
+																																				beforeCount: [Function],
+																																					beforeDefine: [Function],
+																																						afterDefine: [Function],
+																																							beforeInit: [Function],
+																																								afterInit: [Function],
+																																									beforeAssociate: [Function],
+																																										afterAssociate: [Function],
+																																											beforeConnect: [Function],
+																																												afterConnect: [Function],
+																																													beforeDisconnect: [Function],
+																																														afterDisconnect: [Function],
+																																															beforeSync: [Function],
+																																																afterSync: [Function],
+																																																	beforeBulkSync: [Function],
+																																																		afterBulkSync: [Function],
+																																																			beforeQuery: [Function],
+																																																				afterQuery: [Function],
+																																																					Error: [Function: BaseError],
+																																																						BaseError: [Function: BaseError],
+																																																							AggregateError: [Function: AggregateError],
+																																																								AsyncQueueError: [Function: AsyncQueueError],
+																																																									AssociationError: [Function: AssociationError],
+																																																										BulkRecordError: [Function: BulkRecordError],
+																																																											ConnectionError: [Function: ConnectionError],
+																																																												DatabaseError: [Function: DatabaseError],
+																																																													EagerLoadingError: [Function: EagerLoadingError],
+																																																														EmptyResultError: [Function: EmptyResultError],
+																																																															InstanceError: [Function: InstanceError],
+																																																																OptimisticLockError: [Function: OptimisticLockError],
+																																																																	QueryError: [Function: QueryError],
+																																																																		SequelizeScopeError: [Function: SequelizeScopeError],
+																																																																			ValidationError: { [Function: ValidationError] ValidationErrorItem: [Object] },
+		ValidationErrorItem: { [Function: ValidationErrorItem] Origins: [Object], TypeStringMap: [Object] },
+		AccessDeniedError: [Function: AccessDeniedError],
+			ConnectionAcquireTimeoutError: [Function: ConnectionAcquireTimeoutError],
+				ConnectionRefusedError: [Function: ConnectionRefusedError],
+					ConnectionTimedOutError: [Function: ConnectionTimedOutError],
+						HostNotFoundError: [Function: HostNotFoundError],
+							HostNotReachableError: [Function: HostNotReachableError],
+								InvalidConnectionError: [Function: InvalidConnectionError],
+									ExclusionConstraintError: [Function: ExclusionConstraintError],
+										ForeignKeyConstraintError: [Function: ForeignKeyConstraintError],
+											TimeoutError: [Function: TimeoutError],
+												UnknownConstraintError: [Function: UnknownConstraintError],
+													UniqueConstraintError: [Function: UniqueConstraintError],
+														Sequelize: [Circular],
+      default: [Circular]
+	}
+}
