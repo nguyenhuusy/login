@@ -1,48 +1,21 @@
 //load bcrypt
 var bCrypt = require('bcrypt-nodejs');
 var passport = require('passport')
-
 module.exports = function (passport, user) {
 	var User = user;
 	var LocalStrategy = require('passport-local').Strategy;
-	// passport.serializeUser(function (user, done) {
-	// 	done(null, user.id);
-	// });
-	// passport.deserializeUser(function (id, done) {
-	// 	console.log('Userrrrrrrrrrrr',User)
-	// 	User.findById(id).then(function (user) {
-	// 		if (user) {
-	// 			done(null, user.get());
-	// 		} else {
-	// 			done(user.errors, null);
-	// 		}
-	// 	}).catch(function (err) {
-	// 		console.log(err);
-	// });
-	// });
-	passport.serializeUser(function(user, done) {
-    done(null, user.id);
-});
-
-passport.deserializeUser(function(id, done) {
-    User.findById(id).then(function (user) {
-        done(null, user);
-    }).catch(function (err) {
-        console.log(err);
-    })
-});
+		//--------------------------------------SignUP------------------------------------------------------
 	passport.use('local-signup', new LocalStrategy(
 		{
 			usernameField: 'email',
 			passwordField: 'password',
 			passReqToCallback: true // allows us to pass back the entire request to the callback
 		},
-
 		function (req, email, password, done) {
 			var generateHash = function (password) {
 				return bCrypt.hashSync(password, bCrypt.genSaltSync(8), null);
 			};
-			console.log('User1rrrrr',User)
+			console.log('req', req)
 			User.findOne({
 				where: {
 					email: email
@@ -61,7 +34,7 @@ passport.deserializeUser(function(id, done) {
 						firstname: req.body.firstname,
 						lastname: req.body.lastname
 					};
-					console.log('User2rrrrr',User)
+					console.log('User2rrrrr', User)
 					User.create(data).then(function (newUser, created) {
 						if (!newUser) {
 							return done(null, false);
@@ -70,30 +43,98 @@ passport.deserializeUser(function(id, done) {
 							return done(null, newUser);
 						}
 					});
-					//serialize
-					// passport.serializeUser(function (user, done) {
-					// 	done(null, user.id);
-					// });
-					// deserialize user 
-					// passport.deserializeUser(function (id, done) {
-					// 	console.log('Userrrrrrrrrrrr',User)
-					// 	User.findById(id).then(function (user) {
-					// 		if (user) {
-					// 			done(null, user.get());
-					// 		} else {
-					// 			done(user.errors, null);
-					// 		}
-					// 	});
-					// });
+
 				}
-				
+
 			}
-			
+
 			);
 		}
-		//*---------------------------------------------
-	));
-	
 
+	));
+	//--------------------------------------SignIN------------------------------------------------------
+	passport.use('local-signin', new LocalStrategy(
+ 
+    {
+ 
+        // by default, local strategy uses username and password, we will override with email
+ 
+        usernameField: 'email',
+ 
+        passwordField: 'password',
+ 
+        passReqToCallback: true // allows us to pass back the entire request to the callback
+ 
+    },
+ 
+ 
+    function(req, email, password, done) {
+ 
+        var User = user;
+ 
+        var isValidPassword = function(userpass, password) {
+ 
+            return bCrypt.compareSync(password, userpass);
+ 
+        }
+ 
+        User.findOne({
+            where: {
+                email: email
+            }
+        }).then(function(user) {
+ 
+            if (!user) {
+ 
+                return done(null, false, {
+                    message: 'Email does not exist'
+                });
+ 
+            }
+ 
+            if (!isValidPassword(user.password, password)) {
+ 
+                return done(null, false, {
+                    message: 'Incorrect password.'
+                });
+ 
+            }
+ 
+ 
+            var userinfo = user.get();
+            return done(null, userinfo);
+ 
+ 
+        }).catch(function(err) {
+ 
+            console.log("Error:", err);
+ 
+            return done(null, false, {
+                message: 'Something went wrong with your Signin'
+            });
+ 
+        });
+ 
+ 
+    }
+ 
+));
+//-----------------------------------------------------------------
+	passport.serializeUser(function (user, done) {
+		done(null, user.id);
+		console.log('serializeUser', user)
+	});
+	passport.deserializeUser(function (id, done) {
+		console.log('deserializeUser', User)
+		User.findAll({
+			where: {
+				'id': id
+			}
+		}).then(function (user) {
+			done(null, user);
+		}).catch(function (err) {
+			console.log(err);
+		})
+	});
 
 }
